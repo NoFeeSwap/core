@@ -58,7 +58,7 @@ contract TokenWrapper {
 
   function balanceOfSelf(
     address tokenAddress
-  ) public returns (
+  ) public view returns (
     uint256 result
   ) {
     result = TokenLibrary.balanceOfSelf(
@@ -99,7 +99,7 @@ contract TokenWrapper {
   function balanceOfSelf(
     address tokenAddress,
     uint256 id
-  ) public returns (
+  ) public view returns (
     uint256 result
   ) {
     result = TokenLibrary.balanceOfSelf(

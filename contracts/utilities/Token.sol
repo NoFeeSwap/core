@@ -240,7 +240,7 @@ library TokenLibrary {
   /// @notice Returns balance of 'address(this)' ERC-20 tokens.
   function balanceOfSelf(
     address token
-  ) internal returns (
+  ) internal view returns (
     uint256 value
   ) {
     // The appropriate selector for ERC20's 'balanceOf' method.
@@ -263,8 +263,8 @@ library TokenLibrary {
       mstore(0, selector)
       mstore(4, address()) // Append 'address(this)'.
       // Invokes 'IERC20(token).balanceOf' and relays the reason if reverted.
-      // The call is deemed successful if the output of 'call' is 'true' and if
-      // the length of return data is exactly '32'.
+      // The staticcall is deemed successful if the output of 'staticcall' is
+      // 'true' and if the length of return data is exactly '32'.
       if iszero(
         and(
           // Here, we check if the length of return data is exactly '32' bytes.
@@ -272,7 +272,7 @@ library TokenLibrary {
           // We use 36 because the length of our calldata totals up to:
           // '4 + 32'. We use 0 and 32 to copy up to 32 bytes of return data
           // into the scratch space.
-          call(gas(), token, 0, 0, 36, 0, 32)
+          staticcall(gas(), token, 0, 0, 36, 0, 32)
         )
       ) {
         // Return data is copied to memory and relayed as a revert message.
@@ -291,7 +291,7 @@ library TokenLibrary {
   function balanceOfSelf(
     address token, 
     uint256 id
-  ) internal returns (
+  ) internal view returns (
     uint256 value
   ) {
     // The appropriate selector for method 'balanceOf' which is the same in
@@ -323,8 +323,8 @@ library TokenLibrary {
 
       // Invokes 'IERC6909(token).balanceOf' or equivalently 
       // 'IERC1155(token).balanceOf' and relays the reason if reverted.
-      // The call is deemed successful if the output of 'call' is 'true' and if
-      // the length of return data is exactly '32'.
+      // The staticcall is deemed successful if the output of 'staticcall' is
+      // 'true' and if the length of return data is exactly '32'.
       if iszero(
         and(
           // Here, we check if the length of return data is exactly '32' bytes.
@@ -332,7 +332,7 @@ library TokenLibrary {
           // We use 68 because the length of our calldata totals up to:
           // '4 + 32 + 32'. We use 0 and 32 to copy up to 32 bytes of return
           // data into the scratch space.
-          call(gas(), token, 0, 0, 68, 0, 32)
+          staticcall(gas(), token, 0, 0, 68, 0, 32)
         )
       ) {
         // Return data is copied to memory and relayed as a revert message.
